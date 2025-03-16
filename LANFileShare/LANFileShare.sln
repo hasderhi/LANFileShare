@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LANFileShare", "LANFileShare.csproj", "{C4B29A09-BE9C-988D-FBF7-17FAC75DC1FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4B29A09-BE9C-988D-FBF7-17FAC75DC1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B29A09-BE9C-988D-FBF7-17FAC75DC1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B29A09-BE9C-988D-FBF7-17FAC75DC1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B29A09-BE9C-988D-FBF7-17FAC75DC1FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {123705B3-6ECA-4634-A41E-E47CBE6EFF0A}
+	EndGlobalSection
+EndGlobal

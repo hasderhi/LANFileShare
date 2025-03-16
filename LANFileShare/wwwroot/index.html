@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAN File Sharing</title>
+    <style>
+        body {
+            background-color: #d6d6d6;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+        }
+        h2 {
+            color: #343a40;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+            text-align: center;
+            color: #343a40;
+        }
+        .drop-zone {
+            border: 2px dashed #007bff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 10px;
+            color: #343a40;
+            text-align: center;
+        }
+        .placeholder {
+            color: #343a40;
+        }
+        .title-container {
+            display: block;
+            max-width: fit-content;
+            margin-inline: auto;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a span {
+            display: none;
+        }
+        a:hover span {
+            display: block;
+        }
+        footer {
+            margin: 30%;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #343a40;
+            }
+            h1 {
+                color: #d6d6d6;
+            }
+            h2 {
+                color: #d6d6d6;
+            }
+            footer {
+                color: #d6d6d6;
+            }
+            input[type="file"] {
+                color: #d6d6d6;
+            }
+            .drop-zone {
+                color: #d6d6d6;
+            }
+            .placeholder {
+                color: #d6d6d6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title-container">
+        <h1>LANFileShare</h1>
+    </div>
+
+    <br>
+
+    <h2>Upload File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput">
+        <div class="drop-zone" id="dropZone">Drag and drop files here</div>
+        <button type="submit">Upload</button>
+    </form>
+
+    <br>
+
+    <h2>Available Files</h2>
+    <ul id="fileList">
+    
+    </ul>
+    <footer>
+        <p>&copy; 2025 Tobias Kisling ('tk_dev', 'hasderhi')</p>
+        <a href="https://github.com/hasderhi">My Github</a>
+    </footer>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(e) {
+            e.preventDefault();
+            let formData = new FormData();
+            formData.append("file", document.getElementById("fileInput").files[0]);
+
+            await fetch("/upload", { method: "POST", body: formData });
+            loadFiles();
+        };
+
+        document.getElementById('dropZone').addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.backgroundColor = '#e0e0e0';
+        });
+
+        document.getElementById('dropZone').addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.backgroundColor = '';
+        });
+
+        document.getElementById('dropZone').addEventListener('drop', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.backgroundColor = '';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                let formData = new FormData();
+                formData.append("file", files[0]);
+
+                await fetch("/upload", { method: "POST", body: formData });
+                loadFiles();
+            }
+        });
+
+        async function loadFiles() {
+            let res = await fetch("/files");
+            let files = await res.json();
+            let list = document.getElementById("fileList");
+
+            if (files.length > 0) {
+                list.innerHTML = "";
+                files.forEach(file => {
+                    list.innerHTML += `<li><a href="/download/${file}" download>${file}<span>Download</span></a></li>`;
+                });
+            }
+            else {
+                list.innerHTML = `<li class="placeholder">Nothing there so far...</li>`;
+                }
+        }
+        loadFiles();
+    </script>
+</body>
+</html>
