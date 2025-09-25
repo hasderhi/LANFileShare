@@ -296,7 +296,7 @@ namespace LANFileShare
             }
         }
 
-        
+
 
         private void btnStartServer_Click(object sender, EventArgs e)
         {
@@ -349,7 +349,7 @@ namespace LANFileShare
         }
 
 
-        
+
         private void btnCopyLink_Click(object sender, EventArgs e)
         {
             string serverUrl = $"http://{GetLocalIPAddress()}:5000";
@@ -409,7 +409,7 @@ namespace LANFileShare
             }
         }
 
-        
+
 
         private void btnShowQR_Click(object sender, EventArgs e)
         {
