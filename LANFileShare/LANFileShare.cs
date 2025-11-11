@@ -17,7 +17,7 @@ using System.Drawing.Imaging;
 using System.IO;
 
 //
-// LANFileShare by Tobias Kisling
+// LANFileShare by Annabeth Kisling
 //
 
 namespace LANFileShare
