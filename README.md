@@ -1,9 +1,5 @@
 # LANFileShare
 
-> [!WARNING]
-> I just noticed that I must've forgotten to actually provide a release when I created this software years ago,
-> despite mentioning it in the README. I will create one as soon as possible.
-
 ## A cool tool to easily share files on your local network. Written in C# using .NET Windows Forms
 
 ![The Windows Forms GUI](readme-media/img01.png)
