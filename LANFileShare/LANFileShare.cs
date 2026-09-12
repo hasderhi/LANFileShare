@@ -17,7 +17,7 @@ using System.Drawing.Imaging;
 using System.IO;
 
 //
-// LANFileShare by Tobias Kisling
+// LANFileShare by Annabeth Kisling
 //
 
 namespace LANFileShare
@@ -418,5 +418,14 @@ namespace LANFileShare
             pbQRCode.Visible = true;
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("LANFileShare, a tk_dev Software application.\nFor more information, visit tk-dev-software.com.\n\n\nCopyright (c) 2026 Annabeth Kisling", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

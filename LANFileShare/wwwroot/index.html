@@ -1,187 +1,524 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LAN File Sharing</title>
+    <meta name="color-scheme" content="light dark">
+    <title>LANFileShare</title>
+
     <style>
+        :root {
+            --bg: #f4f6f8;
+            --surface: #ffffff;
+            --surface-hover: #f8f9fb;
+            --border: #dfe3e8;
+            --text: #1f2328;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-soft: rgba(37, 99, 235, 0.08);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            --radius: 14px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --surface: #161b22;
+                --surface-hover: #1c222b;
+                --border: #30363d;
+                --text: #e6edf3;
+                --text-secondary: #8b949e;
+                --accent: #58a6ff;
+                --accent-hover: #79b8ff;
+                --accent-soft: rgba(88, 166, 255, 0.10);
+                --shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #d6d6d6;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
-            text-align: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
+
+        .container {
+            width: min(720px, 100%);
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 26px;
+            font-weight: 700;
+        }
+
         h1 {
-            color: #343a40;
-            text-align: center;
+            margin: 0;
+            font-size: clamp(28px, 5vw, 36px);
+            font-weight: 700;
+            letter-spacing: -0.8px;
         }
+
+        .subtitle {
+            margin: 8px 0 0;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            margin-bottom: 18px;
+        }
+
         h2 {
-            color: #343a40;
+            margin: 0;
+            font-size: 19px;
+            font-weight: 650;
+            letter-spacing: -0.2px;
         }
-        form {
+
+        .section-description {
+            margin: 5px 0 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        #uploadForm {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #fileInput {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .drop-zone {
+            min-height: 170px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
-        }
-        input[type="file"] {
-            margin-bottom: 10px;
+            justify-content: center;
+            gap: 9px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text-secondary);
             text-align: center;
-            color: #343a40;
-        }
-        .drop-zone {
-            border: 2px dashed #007bff;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 10px;
-            color: #343a40;
-            text-align: center;
-        }
-        .placeholder {
-            color: #343a40;
-        }
-        .title-container {
-            display: block;
-            max-width: fit-content;
-            margin-inline: auto;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
         }
-        button:hover {
-            background-color: #0056b3;
+
+            .drop-zone:hover,
+            .drop-zone.dragover {
+                border-color: var(--accent);
+                background: var(--accent-soft);
+            }
+
+            .drop-zone.dragover {
+                transform: scale(1.01);
+            }
+
+        .drop-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 21px;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+
+        .drop-title {
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 600;
         }
-        li {
-            margin: 5px 0;
+
+        .drop-subtitle {
+            font-size: 13px;
         }
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        a span {
+
+        .selected-file {
             display: none;
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface-hover);
+            color: var(--text);
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        a:hover span {
-            display: block;
+
+        button {
+            width: 100%;
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 9px;
+            background: var(--accent);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.18s ease, transform 0.1s ease, opacity 0.18s ease;
         }
+
+            button:hover {
+                background: var(--accent-hover);
+            }
+
+            button:active {
+                transform: scale(0.99);
+            }
+
+            button:disabled {
+                opacity: 0.55;
+                cursor: not-allowed;
+            }
+
+        #fileList {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+            #fileList li {
+                margin: 0;
+            }
+
+            #fileList a {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 13px 15px;
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                background: var(--surface);
+                color: var(--text);
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+            }
+
+                #fileList a:hover {
+                    background: var(--surface-hover);
+                    border-color: var(--accent);
+                    transform: translateY(-1px);
+                }
+
+        .file-icon {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        .file-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .download-label {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .placeholder {
+            padding: 28px 15px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 14px;
+        }
+
         footer {
-            margin: 30%;
+            padding: 18px 0 8px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
         }
-        @media (prefers-color-scheme: dark) {
+
+            footer p {
+                margin: 0 0 5px;
+            }
+
+            footer a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+
+        @media (max-width: 520px) {
             body {
-                background-color: #343a40;
+                padding: 24px 14px;
             }
-            h1 {
-                color: #d6d6d6;
+
+            .card {
+                padding: 20px;
             }
-            h2 {
-                color: #d6d6d6;
+
+            header {
+                margin-bottom: 24px;
             }
-            footer {
-                color: #d6d6d6;
-            }
-            input[type="file"] {
-                color: #d6d6d6;
-            }
-            .drop-zone {
-                color: #d6d6d6;
-            }
-            .placeholder {
-                color: #d6d6d6;
+
+            .download-label {
+                display: none;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="title-container">
-        <h1>LANFileShare</h1>
-    </div>
+    <main class="container">
+        <header>
+            <h1>LANFileShare</h1>
+            <p class="subtitle">Simple file sharing over your local network</p>
+        </header>
 
-    <br>
+        <section class="card">
+            <div class="section-header">
+                <h2>Upload a file</h2>
+                <p class="section-description">
+                    Select a file or drag and drop it below.
+                </p>
+            </div>
 
-    <h2>Upload File</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" id="fileInput">
-        <div class="drop-zone" id="dropZone">Drag and drop files here</div>
-        <button type="submit">Upload</button>
-    </form>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label class="drop-zone" id="dropZone" for="fileInput">
+                    <div class="drop-icon">↑</div>
+                    <div class="drop-title">Drop your file here</div>
+                    <div class="drop-subtitle">or click to browse your computer</div>
+                </label>
 
-    <br>
+                <input type="file" id="fileInput">
 
-    <h2>Available Files</h2>
-    <ul id="fileList">
-    
-    </ul>
-    <footer>
-        <p>&copy; 2025 Tobias Kisling ('tk_dev', 'hasderhi')</p>
-        <a href="https://github.com/hasderhi">My Github</a>
-    </footer>
+                <div class="selected-file" id="selectedFile"></div>
+
+                <button type="submit" id="uploadButton">
+                    Upload file
+                </button>
+            </form>
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Available files</h2>
+                <p class="section-description">
+                    Files currently available on this LAN share.
+                </p>
+            </div>
+
+            <ul id="fileList"></ul>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Annabeth Kisling · tk_dev · hasderhi</p>
+            <a href="https://github.com/hasderhi" target="_blank" rel="noopener">
+                GitHub
+            </a>
+            <a href="https://tk-dev-software.com" target="_blank" rel="noopener">
+                Website
+            </a>
+        </footer>
+
+    </main>
+
     <script>
-        document.getElementById('uploadForm').onsubmit = async function(e) {
-            e.preventDefault();
-            let formData = new FormData();
-            formData.append("file", document.getElementById("fileInput").files[0]);
+        const uploadForm = document.getElementById("uploadForm");
+        const fileInput = document.getElementById("fileInput");
+        const dropZone = document.getElementById("dropZone");
+        const selectedFile = document.getElementById("selectedFile");
+        const uploadButton = document.getElementById("uploadButton");
+        const fileList = document.getElementById("fileList");
 
-            await fetch("/upload", { method: "POST", body: formData });
-            loadFiles();
-        };
+        function updateSelectedFile(file) {
+            if (!file) {
+                selectedFile.style.display = "none";
+                selectedFile.textContent = "";
+                return;
+            }
 
-        document.getElementById('dropZone').addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.style.backgroundColor = '#e0e0e0';
+            selectedFile.textContent = `Selected: ${file.name}`;
+            selectedFile.style.display = "block";
+        }
+
+        fileInput.addEventListener("change", () => {
+            updateSelectedFile(fileInput.files[0]);
         });
 
-        document.getElementById('dropZone').addEventListener('dragleave', function(e) {
+        dropZone.addEventListener("dragover", (e) => {
             e.preventDefault();
-            e.stopPropagation();
-            this.style.backgroundColor = '';
+            dropZone.classList.add("dragover");
         });
 
-        document.getElementById('dropZone').addEventListener('drop', async function(e) {
+        dropZone.addEventListener("dragleave", (e) => {
             e.preventDefault();
-            e.stopPropagation();
-            this.style.backgroundColor = '';
+            dropZone.classList.remove("dragover");
+        });
 
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                let formData = new FormData();
-                formData.append("file", files[0]);
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
 
-                await fetch("/upload", { method: "POST", body: formData });
-                loadFiles();
+            const file = e.dataTransfer.files[0];
+
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                updateSelectedFile(file);
+            }
+        });
+
+        uploadForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const file = fileInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            uploadButton.disabled = true;
+            uploadButton.textContent = "Uploading…";
+
+            try {
+                const response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error("Upload failed");
+                }
+
+                fileInput.value = "";
+                updateSelectedFile(null);
+                await loadFiles();
+
+            } catch (error) {
+                console.error(error);
+                alert("The file could not be uploaded.");
+            } finally {
+                uploadButton.disabled = false;
+                uploadButton.textContent = "Upload file";
             }
         });
 
         async function loadFiles() {
-            let res = await fetch("/files");
-            let files = await res.json();
-            let list = document.getElementById("fileList");
+            try {
+                const response = await fetch("/files");
 
-            if (files.length > 0) {
-                list.innerHTML = "";
-                files.forEach(file => {
-                    list.innerHTML += `<li><a href="/download/${file}" download>${file}<span>Download</span></a></li>`;
-                });
-            }
-            else {
-                list.innerHTML = `<li class="placeholder">Nothing there so far...</li>`;
+                if (!response.ok) {
+                    throw new Error("Could not load files");
                 }
+
+                const files = await response.json();
+
+                if (files.length === 0) {
+                    fileList.innerHTML =
+                        `<li class="placeholder">No files have been uploaded yet.</li>`;
+                    return;
+                }
+
+                fileList.innerHTML = "";
+
+                files.forEach(file => {
+                    const li = document.createElement("li");
+
+                    const link = document.createElement("a");
+                    link.href = `/download/${encodeURIComponent(file)}`;
+                    link.download = file;
+
+                    const icon = document.createElement("div");
+                    icon.className = "file-icon";
+                    icon.textContent = "↧";
+
+                    const name = document.createElement("span");
+                    name.className = "file-name";
+                    name.textContent = file;
+
+                    const download = document.createElement("span");
+                    download.className = "download-label";
+                    download.textContent = "Download";
+
+                    link.appendChild(icon);
+                    link.appendChild(name);
+                    link.appendChild(download);
+
+                    li.appendChild(link);
+                    fileList.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error(error);
+
+                fileList.innerHTML =
+                    `<li class="placeholder">Could not load the file list.</li>`;
+            }
         }
+
         loadFiles();
     </script>
 </body>
