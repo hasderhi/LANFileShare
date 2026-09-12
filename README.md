@@ -1,5 +1,9 @@
 # LANFileShare
 
+> [!WARNING]
+> I just noticed that I must've forgotten to actually provide a release when I created this software years ago,
+> despite mentioning it in the README. I will create one as soon as possible.
+
 ## A cool tool to easily share files on your local network. Written in C# using .NET Windows Forms
 
 ![The Windows Forms GUI](readme-media/img01.png)
@@ -60,6 +64,6 @@ To use the tool, follow these steps:
 
 This tool is completely open-source and released under the MIT-License. All icons used are from the [Must Have Icons](https://www.iconarchive.com/show/must-have-icons-by-visualpharm.html) icon set. If you have any questions or need help, feel free to contact me on Github.
 
-Copyright (c) 2025 Tobias Kisling ("tk_dev", "hasderhi")
+Copyright (c) 2025-2026 Annabeth Kisling ("tk_dev", "hasderhi")
 
 # tk_dev - Software with passion!
